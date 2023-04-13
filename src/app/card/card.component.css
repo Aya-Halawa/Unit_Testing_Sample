@@ -1,0 +1,42 @@
+.team-details {
+    margin: 2rem;
+}
+
+.remove {
+    float: right;
+}
+
+.team-details .results {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.team-details .results .results-stats {
+    width: 60%;
+    flex: 0 0 auto;
+}
+
+.team-details .results .results-img {
+    width: 40%;
+    flex: 0 0 auto;
+}
+
+.team-details .results .results-img img {
+    width: 100%;
+}
+
+.team-details .results-title {
+    margin: 1rem 0;
+}
+
+.team-details .game-result {
+    border-radius: 50%;
+    padding: 0.2rem;
+    background-color: green;
+    margin: 0.1rem;
+    color: white;
+}
+
+.team-details .game-result.loss {
+    background-color: red;
+}

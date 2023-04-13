@@ -1,0 +1,17 @@
+<div class="team-details">
+    <div class="title">
+        {{ team.full_name }} [{{ team.abbreviation }}]
+        <a class="remove" id="remove{{ team.abbreviation }}">x</a>
+    </div>
+    <small>{{ team.conference | conference}}</small>
+    <hr />
+    <div class="results">
+
+        <div class="results-img" pTooltip="Hello">
+            <img src="https://interstate21.com/nba-logos/{{
+              team.abbreviation
+            }}.png" alt="" />
+        </div>
+        <p-button label="Submit" styleClass="p-button-link"></p-button>
+    </div>
+</div>

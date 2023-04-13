@@ -1,0 +1,6 @@
+<div class="main-content">
+  <div *ngIf="loading" data-testid="loading">Loading...</div>
+  <div class="teams" *ngIf="!loading" data-testid="team-details">
+    <app-card *ngFor="let team of teams$" [team]="team"></app-card>
+  </div>
+</div>
