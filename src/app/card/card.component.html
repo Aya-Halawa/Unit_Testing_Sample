@@ -1,17 +1,23 @@
-<div class="team-details">
+<div class="team-details ">
     <div class="title">
         {{ team.full_name }} [{{ team.abbreviation }}]
-        <a class="remove" id="remove{{ team.abbreviation }}">x</a>
+        <a class="remove" id="remove{{ team.abbreviation }}" (click)="untrackTeam.emit()">x</a>
     </div>
-    <small>{{ team.conference | conference}}</small>
+    <small>{{ team.conference | conference }}</small>
     <hr />
     <div class="results">
+        <div class="results-stats" *ngIf="team.stats">
+            <div class="results-title">Results of the past 12 days:</div>
+            <span *ngFor="let result of team.stats?.game_results" class="game-result"
+                [ngClass]="{ loss: result == GameResult.L }">{{ result }}</span>
+            <small class="results-title">Avg pts scored: {{ team.stats.avg_pts_scored }}</small>
+            <small class="results-title">Avg pts conceded: {{ team.stats.avg_pts_conceded }}</small>
 
-        <div class="results-img" pTooltip="Hello">
-            <img src="https://interstate21.com/nba-logos/{{
-              team.abbreviation
-            }}.png" alt="" />
         </div>
-        <p-button label="Submit" styleClass="p-button-link"></p-button>
+        <div class="results-img">
+            <img src="https://interstate21.com/nba-logos/{{
+                  team.abbreviation
+                }}.png" alt="" />
+        </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Team } from './models/Team';
 import { TeamsServiceService } from './teams-service.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Team } from './models/team';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +10,33 @@ import { TeamsServiceService } from './teams-service.service';
 })
 export class AppComponent {
   teams$: Team[] = <Team[]>[];
-  loading: boolean = true;
+  form: FormGroup = <FormGroup>{};
+  trackedTeams: Map<number, Team> = new Map<number, Team>();
   constructor(private teamsService: TeamsServiceService) {
 
   }
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      name: new FormControl(''),
+    });
     this.getTeams();
   }
   getTeams(): void {
-    this.loading = true;
     this.teamsService.getAllTeams().subscribe(res => {
-      this.loading = false;
       this.teams$ = res;
+      this.form.controls['name'].setValue(this.teams$[0]);
     })
+  }
+  trackTeam() {
+
+    let team = this.form.controls['name'].getRawValue();
+    this.teamsService.calcTeamStats(team, 12);
+    this.trackedTeams.set(team.id, team);
+  }
+
+  untrackTeam(teamId: number) {
+    this.trackedTeams.delete(teamId);
   }
 }
 

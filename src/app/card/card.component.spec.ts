@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockBuilder, MockedComponentFixture, MockRender } from 'ng-mocks';
 import { AppModule } from '../app.module';
 import { ConferencePipe } from '../conference.pipe';
-import { Team } from '../models/Team';
+import { Team } from '../models/team';
 
 import { CardComponent } from './card.component';
 
@@ -14,7 +14,7 @@ describe('CardComponent', () => {
 
     await MockBuilder(CardComponent, AppModule).mock(ConferencePipe);
 
-    let team: Team = { id: 1, full_name: 'Fake Team', abbreviation: 'FT', conference: 'west', games: [] }
+    let team: Team = { id: 1, full_name: 'Fake Team', abbreviation: 'FT', conference: 'west', games: [], stats: { avg_pts_conceded: 0, avg_pts_scored: 0, game_results: [] } }
     fixture = MockRender(CardComponent, { team: team }, { detectChanges: false });
     component = fixture.point.componentInstance;
   });

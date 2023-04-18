@@ -1,6 +1,14 @@
 <div class="main-content">
-  <div *ngIf="loading" data-testid="loading">Loading...</div>
-  <div class="teams" *ngIf="!loading" data-testid="team-details">
-    <app-card *ngFor="let team of teams$" [team]="team"></app-card>
+  <h2>NBA Score Tracking App</h2>
+  <form [formGroup]="form">
+    <p-dropdown data-testid="teamsDropdown" formControlName="name" [options]="teams$"
+      optionLabel="full_name"></p-dropdown>
+    <button label="Track Team" data-testid="trackBtn" (click)="trackTeam()"></button>
+  </form>
+
+
+  <div class="teams row" data-testid="team-details">
+    <app-card class="col-3" *ngFor="let team of trackedTeams | keyvalue" [team]="team.value"
+      (untrackTeam)="untrackTeam(team.key)"></app-card>
   </div>
 </div>

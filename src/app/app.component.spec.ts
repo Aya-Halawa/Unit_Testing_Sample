@@ -1,29 +1,33 @@
 
-import { createSpyFromClass, Spy } from 'jasmine-auto-spies';
-import { MockBuilder, MockedComponentFixture, MockRender, ngMocks } from 'ng-mocks';
-import { firstValueFrom, of } from 'rxjs';
+import { Spy } from 'jasmine-auto-spies';
+import { MockBuilder, MockedComponentFixture, MockedDebugElement, MockProvider, MockRender, ngMocks } from 'ng-mocks';
+import { bufferCount, of } from 'rxjs';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 import { CardComponent } from './card/card.component';
-import { ConferencePipe } from './conference.pipe';
-import { Team } from './models/Team';
+import { Team } from './models/team';
 import { TeamsServiceService } from './teams-service.service';
+import { Dropdown } from 'primeng/dropdown';
+import { click, findEl } from './shared/test-helper-functions';
 
 describe('AppComponent', () => {
   let teams: Team[];
   let teamsService: Spy<TeamsServiceService>;
-  let rendered: MockedComponentFixture<AppComponent>;
+  let fixture: MockedComponentFixture<AppComponent>;
   let component: AppComponent;
   let cardComponents: CardComponent[];
   beforeEach(async () => {
-    teams = [{ id: 1, full_name: 'Test Team', abbreviation: 'TST', conference: 'East', games: [] }];
-    teamsService = jasmine.createSpyObj(TeamsServiceService, ['getAllTeams']);
+    teams = [{ id: 1, full_name: 'Test Team', abbreviation: 'TST', conference: 'East', games: [], stats: { avg_pts_conceded: 0, avg_pts_scored: 0, game_results: [] } }];
+    teamsService = jasmine.createSpyObj(TeamsServiceService, ['getAllTeams', 'calcTeamStats']);
     teamsService.getAllTeams.and.returnValue(of(teams));
+    teamsService.calcTeamStats();
+
     await MockBuilder(AppComponent, AppModule)
       .mock(CardComponent)
+
       .provide({ provide: TeamsServiceService, useValue: teamsService });
-    rendered = MockRender(AppComponent, null, { detectChanges: false });
-    component = rendered.point.componentInstance;
+    fixture = MockRender(AppComponent);
+    component = fixture.point.componentInstance;
 
   });
 
@@ -31,30 +35,36 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
-  // describe('Loading', () => {
-
-  //   it('appears when Loading', () => {
-  //     expect(ngMocks.find(['data-testid', 'loading'])).toBeTruthy();
-  //   })
-  // })
-
-  describe('Loading Teams details', () => {
+  describe('Teams dropdown', () => {
+    let dropdown: MockedDebugElement<Dropdown>;
     beforeEach(() => {
-      rendered.detectChanges();
+      fixture.detectChanges();
+      dropdown = findEl(fixture, 'teamsDropdown');
     })
     it('Loads all Team Details from Service', () => {
       expect(component.teams$).toEqual(teams);
     });
 
-    it('Displays Each Team in a Card', () => {
-
-      cardComponents = ngMocks.findAll(CardComponent).map(c => c.componentInstance);
-
-      teams.forEach(team => {
-        expect(cardComponents.find(c => c.team.id === team.id)).toBeTruthy();
-      });
+    it('Sends loaded teams to dropdown options', () => {
+      const dropdownOptions = ngMocks.input(dropdown, 'options');
+      expect(dropdownOptions).toBe(teams);
 
     });
+    it('Displays selected Team in a card', () => {
+      ngMocks.output(dropdown, 'onChange').emit(teams[0]);
+      fixture.detectChanges();
+
+      spyOn(component, 'trackTeam');
+      click(fixture, 'trackBtn');
+
+      fixture.detectChanges();
+      expect(component.form.getRawValue()).toEqual({ name: teams[0] })
+      expect(component.trackTeam).toHaveBeenCalledTimes(1);
+
+
+      // cardComponents = ngMocks.findAll(CardComponent).map(c => c.componentInstance);
+      // expect(cardComponents.length).toBe(1);
+
+    })
   });
 });

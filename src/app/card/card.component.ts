@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GameResult } from '../models/GameResult.enum';
-import { Team } from '../models/Team';
+import { Team } from '../models/team';
 
 @Component({
   selector: 'app-card',
@@ -10,7 +10,9 @@ import { Team } from '../models/Team';
 export class CardComponent implements OnInit {
 
   @Input() team: Team = <Team>{};
-
+  @Output()
+  untrackTeam: EventEmitter<void> = new EventEmitter<void>();
+  GameResult = GameResult;
 
   constructor() { }
 

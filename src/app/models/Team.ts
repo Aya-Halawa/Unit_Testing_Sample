@@ -1,5 +1,6 @@
+
 import { Game } from "./Game";
-import { GameResult } from "./GameResult.enum";
+import { TeamStats } from "./team-stats.model";
 
 export interface Team {
     id: number;
@@ -7,4 +8,5 @@ export interface Team {
     abbreviation: string;
     conference: string;
     games: Game[];
+    stats: TeamStats;
 }

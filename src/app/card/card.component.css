@@ -27,6 +27,7 @@
 
 .team-details .results-title {
     margin: 1rem 0;
+    display: block;
 }
 
 .team-details .game-result {

@@ -6,8 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CardComponent } from './card/card.component';
 import { ConferencePipe } from './conference.pipe';
-import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -19,8 +21,10 @@ import { ButtonModule } from 'primeng/button';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    TooltipModule,
-    ButtonModule
+    ButtonModule,
+    DropdownModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
